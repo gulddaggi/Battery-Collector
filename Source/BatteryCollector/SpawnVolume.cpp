@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "SpawnVolume.h"
+#include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "PickUp.h"
 #include "Kismet/KismetMathLibrary.h"
 
