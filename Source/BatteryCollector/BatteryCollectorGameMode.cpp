@@ -25,6 +25,8 @@ void ABatteryCollectorGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetCurrentState(EBatteryPlayState::EPlaying);
+
 	// Set the score to beat
 	ABatteryCollectorCharacter* MyCharacter = Cast<ABatteryCollectorCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if (MyCharacter)
@@ -57,11 +59,30 @@ void ABatteryCollectorGameMode::Tick(float DeltaTime)
 
 	if (MyCharacter)
 	{
+		// If our power is greater than needed to win, set the game's state to Won
+		if (MyCharacter->GetCurrentPower() > PowerToWin)
+		{
+			SetCurrentState(EBatteryPlayState::EWon);
+		}
 		// If the character's power is positive
-		if (MyCharacter->GetCurrentPower() > 0)
+		else if (MyCharacter->GetCurrentPower() > 0)
 		{
 			// Decrease the character's power using the decay rate
 			MyCharacter->UpdatePower(-DeltaTime * DecayRate * (MyCharacter->GetInitialPower()));
 		}
+		else
+		{
+			SetCurrentState(EBatteryPlayState::EGameOver);
+		}
 	}
+}
+
+EBatteryPlayState ABatteryCollectorGameMode::GetCurrentState() const
+{
+	return CurrentState;
+}
+
+void ABatteryCollectorGameMode::SetCurrentState(EBatteryPlayState NewState)
+{
+	CurrentState = NewState;
 }
